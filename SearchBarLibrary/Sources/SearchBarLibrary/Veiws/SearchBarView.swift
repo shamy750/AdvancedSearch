@@ -1,10 +1,3 @@
-//
-//  SearchBarView.swift
-//
-//
-//  Created by Softsuave on 24/06/24.
-//
-
 import SwiftUI
 
 @available(iOS 14.0, *)
@@ -130,7 +123,7 @@ public struct SearchBar<T: Equatable>: View {
                         self.isEditing = true
                     }
                 
-                if(filterFunction) {
+                if filterFunction {
                     Button(action: {
                         self.showFilterPopup.toggle()
                     }) {
@@ -161,24 +154,16 @@ public struct SearchBar<T: Equatable>: View {
             }
             .frame(width: width)
             .onChange(of: text) { newText in
-                if newText.isEmpty {
-                    filteredArray = array
-                } else {
-                    filteredArray = array.filter { "\($0)".localizedCaseInsensitiveContains(newText) }
-                }
+                applyFilters()
+            }
+            .onChange(of: selectedFilters) { _ in
+                applyFilters()
             }
             
-            if isEditing && !selectedFilters.isEmpty {
+            if !selectedFilters.isEmpty {
                 ChipsView(options: $selectedFilters) { option in
                     if let index = selectedFilters.firstIndex(of: option) {
                         selectedFilters.remove(at: index)
-                        // Deselect the option in the filter options as well
-                        filterOptions.keys.forEach { key in
-                            if var filterArray = filterOptions[key], filterArray.contains(option) {
-                                filterArray.removeAll { $0 == option }
-                                filterOptions[key] = filterArray
-                            }
-                        }
                     }
                 }
                 .padding(.horizontal, 10)
@@ -186,6 +171,16 @@ public struct SearchBar<T: Equatable>: View {
         }
         .sheet(isPresented: $showFilterPopup) {
             FilterPopupView(filterOptions: $filterOptions, selectedFilters: $selectedFilters, presented: $showFilterPopup)
+        }
+    }
+    
+    private func applyFilters() {
+        filteredArray = array.filter { item in
+            let matchesText = text.isEmpty || "\(item)".localizedCaseInsensitiveContains(text)
+            let matchesFilters = selectedFilters.isEmpty || selectedFilters.allSatisfy { filter in
+                "\(item)".localizedCaseInsensitiveContains(filter)
+            }
+            return matchesText && matchesFilters
         }
     }
 }

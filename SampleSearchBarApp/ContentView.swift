@@ -36,7 +36,7 @@ struct ContentView: View {
                 filterFunction: true
             )
             
-            CellView(persons: text.isEmpty ? persons : filteredArray)
+            CellView(persons: text.isEmpty && selectedFilters.isEmpty ? persons : filteredArray)
             
         }
     }
