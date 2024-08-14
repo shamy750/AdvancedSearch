@@ -28,6 +28,7 @@ public struct SearchBar<T: Equatable>: View {
     private var width: CGFloat
     private var searchIconWidth: CGFloat
     private var filterFunction: Bool
+    private var filterHeaderText: String
     
     public init(
         text: Binding<String>,
@@ -53,7 +54,8 @@ public struct SearchBar<T: Equatable>: View {
         height: CGFloat = 40,
         width: CGFloat = .infinity,
         searchIconWidth: CGFloat = 25,
-        filterFunction: Bool = false
+        filterFunction: Bool = false,
+        filterHeaderText: String = "Filter Option"
     ) {
         self._text = text
         self._filteredArray = filteredArray
@@ -79,6 +81,7 @@ public struct SearchBar<T: Equatable>: View {
         self.width = width
         self.searchIconWidth = searchIconWidth
         self.filterFunction = filterFunction
+        self.filterHeaderText = filterHeaderText
     }
     
     public var body: some View {
@@ -102,7 +105,7 @@ public struct SearchBar<T: Equatable>: View {
                             
                             Spacer()
                             
-                            if isEditing {
+                            if isEditing && self.text != "" {
                                 Button(action: {
                                     self.text = ""
                                 }) {
@@ -152,7 +155,6 @@ public struct SearchBar<T: Equatable>: View {
                     .animation(.default)
                 }
             }
-            .frame(width: width)
             .onChange(of: text) { newText in
                 applyFilters()
             }
@@ -170,7 +172,7 @@ public struct SearchBar<T: Equatable>: View {
             }
         }
         .sheet(isPresented: $showFilterPopup) {
-            FilterPopupView(filterOptions: $filterOptions, selectedFilters: $selectedFilters, presented: $showFilterPopup)
+            FilterPopupView(filterOptions: $filterOptions, selectedFilters: $selectedFilters, presented: $showFilterPopup, filterHeaderText: filterHeaderText)
         }
     }
     

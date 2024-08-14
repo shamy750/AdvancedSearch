@@ -12,6 +12,7 @@ struct FilterPopupView: View {
     @Binding var filterOptions: [String: [String]]
     @Binding var selectedFilters: [String]
     @Binding var presented: Bool
+    @State var filterHeaderText: String = "Filter Options"
 
     var body: some View {
         NavigationView {
@@ -30,7 +31,7 @@ struct FilterPopupView: View {
                     }
                 }
             }
-            .navigationTitle("Filter Options")
+            .navigationTitle(filterHeaderText)
             .navigationBarItems(trailing: Button("Done") {
                 presented.toggle()
             })

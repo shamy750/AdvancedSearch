@@ -33,7 +33,8 @@ struct ContentView: View {
                 cornerRadius: 20,
                 corners: UIRectCorner(arrayLiteral: .bottomLeft, .topRight),
                 array: persons, searchIconWidth: 25,
-                filterFunction: true
+                filterFunction: true,
+                filterHeaderText: "Bank & Cards"
             )
             
             CellView(persons: text.isEmpty && selectedFilters.isEmpty ? persons : filteredArray)
