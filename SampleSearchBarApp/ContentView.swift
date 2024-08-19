@@ -23,7 +23,6 @@ struct ContentView: View {
             SearchBar(
                 text: $text,
                 filteredArray: $filteredArray,
-                isEditing: $isEditing,
                 selectedFilters: $selectedFilters,
                 filterOptions: $filterOptions,
                 placeHolderText: "Contacts",

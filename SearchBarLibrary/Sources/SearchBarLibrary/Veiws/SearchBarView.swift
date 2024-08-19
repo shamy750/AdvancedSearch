@@ -4,11 +4,10 @@ import SwiftUI
 public struct SearchBar<T: Equatable>: View {
     @Binding var text: String
     @Binding var filteredArray: [T]
-    @Binding var isEditing: Bool
     @Binding var selectedFilters: [String]
     @Binding var filterOptions: [String: [String]]
     @State private var showFilterPopup = false
-    
+    @State private var isEditing: Bool = false
     private var textColor: Color
     private var placeHolderText: String
     private var borderColor: Color
@@ -33,7 +32,6 @@ public struct SearchBar<T: Equatable>: View {
     public init(
         text: Binding<String>,
         filteredArray: Binding<[T]>,
-        isEditing: Binding<Bool>,
         selectedFilters: Binding<[String]>,
         filterOptions: Binding<[String: [String]]>,
         placeHolderText: String = "Search ...",
@@ -59,7 +57,6 @@ public struct SearchBar<T: Equatable>: View {
     ) {
         self._text = text
         self._filteredArray = filteredArray
-        self._isEditing = isEditing
         self._selectedFilters = selectedFilters
         self._filterOptions = filterOptions
         self.textColor = textColor
@@ -139,7 +136,7 @@ public struct SearchBar<T: Equatable>: View {
                     }
                 }
                 
-                if isEditing {
+                if isEditing && (!selectedFilters.isEmpty || !self.text.isEmpty) {
                     Button(action: {
                         self.isEditing = false
                         self.text = ""
